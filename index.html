@@ -22,19 +22,20 @@
             <!--Where the search and stored locations go-->
             <div class="col-md-3 bg-light">
                 <!--Instructional Text for user-->
-                <h1>
+                <h2>
                     Search for a City:
-                </h1>
+                </h2>
                 <br>
-                <form>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="City Name.." id="search-input">
-                        <div class="input-group-append">
-                          <button class="btn btn-primary" type="button" id="search-button">
-                              <i class="fa fa-search" aria-hidden="true"></i>
+                <!--Form to capture user input-->
+                <form class="input-group">
+                    <input type="text" class="form-control" placeholder="City Name.." id="search-input">
+                    <div class="input-group-append">
+                        <!--Submit button that can take click or enter-->
+                        <button type="submit" class="btn btn-primary" id="search-button">
+                            <!--FontAwesome icon for search logo-->
+                            <i class="fa fa-search" aria-hidden="true"></i>
                         </button>
-                        </div>
-                      </div>
+                    </div>
                 </form>
 
                 <!--Begin with search box-->
@@ -46,6 +47,8 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="./assets/script.js"></script>
 </body>
 
 </html>
