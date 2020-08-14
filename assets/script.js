@@ -27,6 +27,7 @@ function renderCityList() {
         newLi.text(localStorageCities[i].cityName);
         newLi.addClass("list-group-item");
         newLi.addClass("city");
+        newLi.attr("data-city", localStorageCities[i].cityName)
         $("#cityList").append(newLi);
     }
 }
@@ -35,8 +36,20 @@ function displayWeatherInfo() {
     $("#top-card").empty();
     $("#five-day").empty();
     $("#day-holder").empty();
-    
 
+    var city = $(this).attr("data-city");
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
+
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function (response) {
+        console.log(response);
+        var todaysWeather = $("<div>");
+        todaysWeather.addClass("card-body");
+
+        $("#top-card").append(todaysWeather);
+    })
 }
 
 $(document).on("click", ".city", displayWeatherInfo);
