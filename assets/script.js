@@ -31,3 +31,13 @@ function renderCityList() {
     }
 }
 
+function displayWeatherInfo() {
+    $("#top-card").empty();
+    $("#five-day").empty();
+    $("#day-holder").empty();
+    
+
+}
+
+$(document).on("click", ".city", displayWeatherInfo);
+
