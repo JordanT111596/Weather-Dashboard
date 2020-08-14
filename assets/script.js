@@ -48,6 +48,10 @@ function displayWeatherInfo() {
         var todaysWeather = $("<div>");
         todaysWeather.addClass("card-body");
 
+        var cityDate = $("<h2>");
+        cityDate = city + " " + (moment().format("[(]M[/]D[/]YYYY[)]"));
+        $(todaysWeather).append(cityDate);
+
         $("#top-card").append(todaysWeather);
     })
 }
