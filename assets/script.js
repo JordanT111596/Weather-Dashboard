@@ -1,5 +1,13 @@
 //event listener that logs the user input using either the button or the enter key
 var apiKey = "863a6db584ee09579b62dfe7cf104c44";
+var todaysDate = moment().format("[(]M[/]D[/]YYYY[)]");
+var tomorrowsDate = moment().add(1, 'd').format("M[/]D[/]YYYY");
+var day2 = moment().add(2, 'd').format("M[/]D[/]YYYY");
+var day3 = moment().add(3, 'd').format("M[/]D[/]YYYY");
+var day4 = moment().add(4, 'd').format("M[/]D[/]YYYY");
+var day5 = moment().add(5, 'd').format("M[/]D[/]YYYY");
+var datesForCard = [tomorrowsDate, tomorrowsDate, tomorrowsDate, tomorrowsDate, tomorrowsDate, tomorrowsDate, tomorrowsDate, day2, day2, day2, day2, day2, day2, day2, day2, day3, day3, day3, day3, day3, day3, day3, day3, day4, day4, day4, day4, day4, day4, day4, day4, day5, day5, day5, day5, day5, day5, day5, day5];
+
 
 renderCityList();
 
@@ -40,8 +48,10 @@ function displayWeatherInfo() {
     if ($(this).attr("data-city")) {
         var city = $(this).attr("data-city");
     }
-    else {var city = $("#search-input").val().trim()}
-    
+    else {
+        var city = $("#search-input").val().trim()
+    }
+
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
 
     $.ajax({
@@ -57,7 +67,7 @@ function displayWeatherInfo() {
 
         //displays city name and date
         var cityDate = $("<h5>");
-        cityDate.text(city + " " + (moment().format("[(]M[/]D[/]YYYY[)]")));
+        cityDate.text(city + " " + todaysDate);
         cityDate.addClass("card-title");
         todaysWeather.append(cityDate);
 
@@ -152,7 +162,7 @@ function displayWeatherInfo() {
             //adds date to card
             var dayCardDate = $("<h5>");
             dayCardDate.addClass("card-title");
-            dayCardDate.text(response.list[i].dt_txt);
+            dayCardDate.text(datesForCard[i]);
             dayCardBody.append(dayCardDate);
 
             //adds icon to card
