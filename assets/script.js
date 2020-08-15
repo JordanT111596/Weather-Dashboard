@@ -103,7 +103,7 @@ function displayWeatherInfo() {
 
         var lat = response.coord.lat;
         var lon = response.coord.lon;
-        var queryURL2 = "http://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + lat + "&lon=" + lon;
+        var queryURL2 = "https://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + lat + "&lon=" + lon;
 
         $.ajax({
             url: queryURL2,
@@ -138,7 +138,7 @@ function displayWeatherInfo() {
 
     $("#five-day").text("5-Day Forecast");
 
-    var queryURL3 = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey;
+    var queryURL3 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey;
 
     $.ajax({
         url: queryURL3,
@@ -246,7 +246,7 @@ function displayWeatherInfoPrior() {
 
             var lat = response.coord.lat;
             var lon = response.coord.lon;
-            var queryURL2 = "http://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + lat + "&lon=" + lon;
+            var queryURL2 = "https://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + lat + "&lon=" + lon;
 
             $.ajax({
                 url: queryURL2,
@@ -281,7 +281,7 @@ function displayWeatherInfoPrior() {
 
         $("#five-day").text("5-Day Forecast");
 
-        var queryURL3 = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey;
+        var queryURL3 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey;
 
         $.ajax({
             url: queryURL3,
