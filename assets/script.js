@@ -109,13 +109,70 @@ function displayWeatherInfo() {
             }
             else if (response.value >= 0 && response.value <= 4.99) {
                 uvIndex.addClass("badge badge-success");
-            }
+            };
         });
 
         //appends all this to the card element
         $("#top-card").append(todaysWeather);
-    })
+    });
+
+    $("#five-day").text("5-Day Forecast");
+
+    var queryURL3 = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey;
+
+    $.ajax({
+        url: queryURL3,
+        method: "GET"
+    }).then(function (response) {
+        //logs response again to see what we're doing
+        console.log(response);
+
+        //makes the card deck
+        var cardDeck = $("<div>");
+        cardDeck.addClass("card-deck");
+        $("#day-holder").append(cardDeck);
+
+        //for loop iterating through 5 days at 12 noon
+        for (var i = 3; i < response.list.length; i = i + 8) {
+
+            //makes one card
+            var dayCard = $("<div>");
+            dayCard.addClass("card text-white bg-primary mb-3");
+            cardDeck.append(dayCard);
+
+            //makes card body
+            var dayCardBody = $("<div>");
+            dayCardBody.addClass("card-body");
+            dayCard.append(dayCardBody);
+
+            //adds date to card
+            var dayCardDate = $("<h5>");
+            dayCardDate.addClass("card-title");
+            dayCardDate.text(response.list[i].dt_txt);
+            dayCardBody.append(dayCardDate);
+
+            //adds icon to card
+            var dayCardIcon = $("<img>");
+            dayCardIcon.attr("src", "https://openweathermap.org/img/wn/" + response.list[i].weather[0].icon + ".png");
+            dayCardIcon.attr("alt", response.list[i].weather[0].description);
+            dayCardBody.append(dayCardIcon);
+
+            //adds temperature to card
+            var dayCardTemp = $("<p>");
+            dayCardTemp.addClass("card-text");
+            dayCardTemp.text("Temp: " + ((((response.list[i].main.temp) - 273.15) * 1.80 + 32).toFixed(0)) + "°F");
+            dayCardBody.append(dayCardTemp);
+
+            //adds humidity to card
+            var dayCardHumid = $("<p>");
+            dayCardHumid.addClass("card-text");
+            dayCardHumid.text("Humidity: " + response.list[i].main.humidity + "%")
+            dayCardBody.append(dayCardHumid);
+        }
+
+    });
 }
+
 
 $(document).on("click", ".city", displayWeatherInfo);
 
