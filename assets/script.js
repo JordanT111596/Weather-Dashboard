@@ -1,71 +1,95 @@
-//event listener that logs the user input using either the button or the enter key
+//my API key
 var apiKey = "863a6db584ee09579b62dfe7cf104c44";
+//today's date
 var todaysDate = moment().format("[(]M[/]D[/]YYYY[)]");
+//tomorrow's date
 var tomorrowsDate = moment().add(1, 'd').format("M[/]D[/]YYYY");
+//the next day's date
 var day2 = moment().add(2, 'd').format("M[/]D[/]YYYY");
+//and the next day
 var day3 = moment().add(3, 'd').format("M[/]D[/]YYYY");
+//..and the next day..
 var day4 = moment().add(4, 'd').format("M[/]D[/]YYYY");
+//..and the day after that..
 var day5 = moment().add(5, 'd').format("M[/]D[/]YYYY");
+//array of dates for the cards
 var datesForCard = [tomorrowsDate, tomorrowsDate, tomorrowsDate, tomorrowsDate, tomorrowsDate, tomorrowsDate, tomorrowsDate, day2, day2, day2, day2, day2, day2, day2, day2, day3, day3, day3, day3, day3, day3, day3, day3, day4, day4, day4, day4, day4, day4, day4, day4, day5, day5, day5, day5, day5, day5, day5, day5];
 
-
+//renders the city list at start
 renderCityList();
+//displays last searched city's info
 displayWeatherInfoPrior();
-
+//event listener that clears the local storage and refreshes the history list
 $("#clear-button").on("click", function () {
     localStorage.clear();
     renderCityList();
 });
 
+//event listener that logs the user input using either the button or the enter key
 $("#search-button").on("click", function (event) {
     //stops page from refreshing upon hitting enter key
     event.preventDefault();
     //stores user input into variable
     var userText = $("#search-input").val().trim();
+    //if there actually is user text then run
     if (userText) {
+        //grabs cities from local storage
         var localStorageCities = JSON.parse(window.localStorage.getItem("localStorageCities")) || [];
+        //makes object from user input
         var newCity = {
             cityName: userText
         }
+        //pushes object just made
         localStorageCities.push(newCity);
+        //updates local storage
         window.localStorage.setItem("localStorageCities", JSON.stringify(localStorageCities));
+        //refreshes city list with new entry
         renderCityList();
+        //displays the entered city's info
         displayWeatherInfo();
     }
 });
 
+//function that shows the city history list
 function renderCityList() {
+    //empties anything already there
     $("#cityList").empty();
+    //grabs cities from local storage
     var localStorageCities = JSON.parse(window.localStorage.getItem("localStorageCities")) || [];
+    //iterates through cities from local storage to add to history list
     for (var i = 0; i < localStorageCities.length; i++) {
         var newLi = $("<li>");
         newLi.text(localStorageCities[i].cityName);
         newLi.addClass("list-group-item");
         newLi.addClass("city");
         newLi.attr("data-city", localStorageCities[i].cityName)
+        //appends each city item to the already made city list element
         $("#cityList").append(newLi);
     }
 }
 
 function displayWeatherInfo() {
+    //empties anything from the right side of the screen already there
     $("#top-card").empty();
     $("#five-day").empty();
     $("#day-holder").empty();
+    //if it's grabbing from a list item then use that city name
     if ($(this).attr("data-city")) {
         var city = $(this).attr("data-city");
     }
+    //otherwise use the new entry
     else {
         var city = $("#search-input").val().trim()
     }
-
+    //api request url that adds in the key and city name
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
 
+    //API request
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (response) {
-        //logs response so i can see what I'm grabbing
-        console.log(response);
+
         //creates card to hold daily city weather info
         var todaysWeather = $("<div>");
         todaysWeather.addClass("card-body");
@@ -101,32 +125,39 @@ function displayWeatherInfo() {
         windToday.text("Wind Speed: " + response.wind.speed + " MPH");
         todaysWeather.append(windToday);
 
+        //grabs city's lat and lon
         var lat = response.coord.lat;
         var lon = response.coord.lon;
+        //new queryURL for the UV Index API
         var queryURL2 = "https://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + lat + "&lon=" + lon;
 
         $.ajax({
             url: queryURL2,
             method: "GET"
         }).then(function (response) {
-            console.log(response);
+
             //displays uvIndex element
             var uvToday = $("<p>");
             uvToday.addClass("card-text");
             uvToday.text("UV Index: ");
 
+            //creates span for UV Index color-coded number
             var uvIndex = $("<span>");
             uvIndex.text(response.value);
             uvToday.append(uvIndex);
 
+            //appends UV index to today's weather
             $("#todays-weather").append(uvToday);
 
+            //if Index is high, go red
             if (response.value >= 8) {
                 uvIndex.addClass("badge badge-danger");
             }
+            //If Index is medium, go yellow
             else if (response.value >= 5 && response.value <= 7.99) {
                 uvIndex.addClass("badge badge-warning");
             }
+            //If index is low, go green
             else if (response.value >= 0 && response.value <= 4.99) {
                 uvIndex.addClass("badge badge-success");
             };
@@ -136,16 +167,16 @@ function displayWeatherInfo() {
         $("#top-card").append(todaysWeather);
     });
 
+    //shows words of title before cards
     $("#five-day").text("5-Day Forecast");
 
+    //new URL for 5 day forecast API
     var queryURL3 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey;
 
     $.ajax({
         url: queryURL3,
         method: "GET"
     }).then(function (response) {
-        //logs response again to see what we're doing
-        console.log(response);
 
         //makes the card deck
         var cardDeck = $("<div>");
@@ -193,7 +224,9 @@ function displayWeatherInfo() {
     });
 }
 
+//does everything that the displayWeatherInfo function does but with the last search to start the page
 function displayWeatherInfoPrior() {
+    //if there's a city in the history, show it, if not, don't run
     if (window.localStorage.getItem("localStorageCities")) {
         var localStorageCitiesP = JSON.parse(window.localStorage.getItem("localStorageCities"))
         $("#top-card").empty();
@@ -207,8 +240,7 @@ function displayWeatherInfoPrior() {
             url: queryURL,
             method: "GET"
         }).then(function (response) {
-            //logs response so i can see what I'm grabbing
-            console.log(response);
+
             //creates card to hold daily city weather info
             var todaysWeather = $("<div>");
             todaysWeather.addClass("card-body");
@@ -252,7 +284,7 @@ function displayWeatherInfoPrior() {
                 url: queryURL2,
                 method: "GET"
             }).then(function (response) {
-                console.log(response);
+
                 //displays uvIndex element
                 var uvToday = $("<p>");
                 uvToday.addClass("card-text");
@@ -287,8 +319,6 @@ function displayWeatherInfoPrior() {
             url: queryURL3,
             method: "GET"
         }).then(function (response) {
-            //logs response again to see what we're doing
-            console.log(response);
 
             //makes the card deck
             var cardDeck = $("<div>");
@@ -338,5 +368,6 @@ function displayWeatherInfoPrior() {
 }
 
 
+//event handler for city history item to display the info
 $(document).on("click", ".city", displayWeatherInfo);
 
