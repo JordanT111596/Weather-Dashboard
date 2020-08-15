@@ -11,6 +11,11 @@ var datesForCard = [tomorrowsDate, tomorrowsDate, tomorrowsDate, tomorrowsDate, 
 
 renderCityList();
 
+$("#clear-button").on("click", function() {
+    localStorage.clear();
+    renderCityList();
+});
+
 $("#search-button").on("click", function (event) {
     //stops page from refreshing upon hitting enter key
     event.preventDefault();
