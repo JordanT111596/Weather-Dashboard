@@ -16,6 +16,7 @@ $("#search-button").on("click", function (event) {
         localStorageCities.push(newCity);
         window.localStorage.setItem("localStorageCities", JSON.stringify(localStorageCities));
         renderCityList();
+        displayWeatherInfo();
     }
 });
 
@@ -36,8 +37,11 @@ function displayWeatherInfo() {
     $("#top-card").empty();
     $("#five-day").empty();
     $("#day-holder").empty();
-
-    var city = $(this).attr("data-city");
+    if ($(this).attr("data-city")) {
+        var city = $(this).attr("data-city");
+    }
+    else {var city = $("#search-input").val().trim()}
+    
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
 
     $.ajax({
@@ -135,7 +139,7 @@ function displayWeatherInfo() {
         //for loop iterating through 5 days at 12 noon
         for (var i = 3; i < response.list.length; i = i + 8) {
 
-            //makes one card
+            //makes card
             var dayCard = $("<div>");
             dayCard.addClass("card text-white bg-primary mb-3");
             cardDeck.append(dayCard);
