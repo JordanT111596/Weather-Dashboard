@@ -48,9 +48,15 @@ function displayWeatherInfo() {
         var todaysWeather = $("<div>");
         todaysWeather.addClass("card-body");
 
-        var cityDate = $("<h2>");
-        cityDate = city + " " + (moment().format("[(]M[/]D[/]YYYY[)]"));
-        $(todaysWeather).append(cityDate);
+        var cityDate = $("<h5>");
+        cityDate.text(city + " " + (moment().format("[(]M[/]D[/]YYYY[)]")));
+        cityDate.addClass("card-title");
+        todaysWeather.append(cityDate);
+
+        var weatherIcon = $("<img>");
+        weatherIcon.attr("src", "https://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png");
+        weatherIcon.attr("alt", response.weather[0].description);
+        cityDate.append(weatherIcon);
 
         $("#top-card").append(todaysWeather);
     })
