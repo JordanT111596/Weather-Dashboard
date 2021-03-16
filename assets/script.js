@@ -236,6 +236,7 @@ function displayWeatherInfoPrior() {
         var city = localStorageCitiesP[(localStorageCitiesP.length - 1)].cityName;
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
 
+        // ajax call to gather data from the OpenWeatherMap API for that day's weather in the entered city
         $.ajax({
             url: queryURL,
             method: "GET"
@@ -280,6 +281,7 @@ function displayWeatherInfoPrior() {
             var lon = response.coord.lon;
             var queryURL2 = "https://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + lat + "&lon=" + lon;
 
+            // ajax call to gather data from the OpenWeatherMap API for the UV index
             $.ajax({
                 url: queryURL2,
                 method: "GET"
@@ -315,6 +317,7 @@ function displayWeatherInfoPrior() {
 
         var queryURL3 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey;
 
+        // ajax call to gather data from the OpenWeatherMap API for the 5 day forecast
         $.ajax({
             url: queryURL3,
             method: "GET"
